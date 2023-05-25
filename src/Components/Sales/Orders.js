@@ -1,558 +1,218 @@
-// import React, { useState, useEffect } from 'react';
-// import { Button, Modal, Form, Input, Table, Space } from 'antd';
-// import axios from 'axios';
-
-// const { Item } = Form;
-
-// const Orders = () => {
-//   const [form] = Form.useForm();
-//   const [orders, setOrders] = useState([]);
-//   const [isModalVisible, setIsModalVisible] = useState(false);
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [editingOrder, setEditingOrder] = useState({});
-
-//   useEffect(() => {
-//     // Get orders from API and update state
-//     const fetchOrders = async () => {
-//       const response = await axios.get('/api/orders');
-//       setOrders(response.data);
-//     };
-//     fetchOrders();
-//   }, []);
-
-//   const addOrder = async (values) => {
-//     // Add new order to API and update state
-//     const response = await axios.post('/api/orders', values);
-//     setOrders([...orders, response.data]);
-//     setIsModalVisible(false);
-//   };
-
-//   const deleteOrder = async (id) => {
-//     // Delete order from API and update state
-//     const response = await axios.delete(`/api/orders/${id}`);
-//     if (response.status === 204) {
-//       setOrders(orders.filter((order) => order.id !== id));
-//     }
-//   };
-
-//   const updateOrder = async (id, values) => {
-//     // Update order in API and update state
-//     const response = await axios.put(`/api/orders/${id}`, values);
-//     if (response.status === 200) {
-//       const updatedOrder = { ...editingOrder, ...values };
-//       setOrders(orders.map((order) => (order.id === id ? updatedOrder : order)));
-//       setIsEditing(false);
-//     }
-//   };
-
-//   const handleEditClick = (record) => {
-//     // Set editing order and open modal for editing
-//     setEditingOrder(record);
-//     setIsEditing(true);
-//     setIsModalVisible(true);
-//   };
-
-//   const handleAddClick = () => {
-//     // Reset form and open modal for adding
-//     form.resetFields();
-//     setIsEditing(false);
-//     setIsModalVisible(true);
-//   };
-
-//   const handleOk = () => {
-//     // Call appropriate function based on whether we are editing or adding
-//     if (isEditing) {
-//       form.validateFields().then((values) => {
-//         updateOrder(editingOrder.id, values);
-//         form.resetFields();
-//       });
-//     } else {
-//       form.validateFields().then((values) => {
-//         addOrder(values);
-//         form.resetFields();
-//       });
-//     }
-//   };
-
-//   const handleCancel = () => {
-//     // Close modal and reset form
-//     setIsModalVisible(false);
-//     form.resetFields();
-//   };
-
-//   const generateInvoice = async (id) => {
-//     // Generate invoice for order with given ID
-//     const response = await axios.post(`/api/orders/${id}/invoice`);
-//     if (response.status === 200) {
-//       // Open generated invoice in new window
-//       window.open(response.data.invoiceUrl, '_blank');
-//     }
-//   };
-
-//   const columns = [
-//     {
-//       title: 'Order ID',
-//       dataIndex: 'id',
-//     },
-//     {
-//       title: 'Customer Name',
-//       dataIndex: 'customer_name',
-//     },
-//     {
-//       title: 'Product Name',
-//       dataIndex: 'product_name',
-//     },
-//     {
-//       title: 'Quantity',
-//       dataIndex: 'quantity',
-//     },
-//     {
-//       title: 'Total Price',
-//       dataIndex: 'total_price',
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (_, record) => (
-//         <Space size="middle">
-//         <Button type="link" onClick={() => handleEditClick(record)}>
-//         Edit
-//         </Button>
-//         <Button type="link" danger onClick={() => deleteOrder(record.id)}>
-//         Delete
-//         </Button>
-//         <Button type="link" onClick={() => generateInvoice(record.id)}>
-//         Generate Invoice
-//         </Button>
-//         </Space>
-//         ),
-//         },
-//         ];
-        
-//         return (
-//         <>
-//         <Button type="primary" onClick={handleAddClick}>
-//         Add Order
-//         </Button>
-//         <Table dataSource={orders} columns={columns} />
-//         <Modal
-//         title={isEditing ? 'Edit Order' : 'Add Order'}
-//         visible={isModalVisible}
-//         onOk={handleOk}
-//         onCancel={handleCancel}
-//         >
-//         <Form form={form} layout="vertical">
-//         <Item
-//         label="Customer Name"
-//         name="customer_name"
-//         initialValue={editingOrder.customer_name}
-//         rules={[
-//         {
-//         required: true,
-//         message: 'Please enter customer name',
-//         },
-//         ]}
-//         >
-//         <Input />
-//         </Item>
-//         <Item
-//         label="Product Name"
-//         name="product_name"
-//         initialValue={editingOrder.product_name}
-//         rules={[
-//         {
-//         required: true,
-//         message: 'Please enter product name',
-//         },
-//         ]}
-//         >
-//         <Input />
-//         </Item>
-//         <Item
-//         label="Quantity"
-//         name="quantity"
-//         initialValue={editingOrder.quantity}
-//         rules={[
-//         {
-//         required: true,
-//         message: 'Please enter quantity',
-//         },
-//         ]}
-//         >
-//         <Input type="number" />
-//         </Item>
-//         <Item
-//         label="Total Price"
-//         name="total_price"
-//         initialValue={editingOrder.total_price}
-//         rules={[
-//         {
-//         required: true,
-//         message: 'Please enter total price',
-//         },
-//         ]}
-//         >
-//         <Input type="number" />
-//         </Item>
-//         </Form>
-//         </Modal>
-//         </>
-//         );
-//         };
-        
-//         export default Orders;
-        
-        
-  //-------------------------------------------------------------------------------------------------------------------------      
-        
-
-// import React, { useState, useEffect } from 'react';
-// import { Button, Modal, Form, Input, Table, Space } from 'antd';
-// import axios from 'axios';
-
-// const { Item } = Form;
-
-// const Orders = () => {
-//   const [form] = Form.useForm();
-//   const [orders, setOrders] = useState([]);
-//   const [isModalVisible, setIsModalVisible] = useState(false);
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [editingOrder, setEditingOrder] = useState({});
-
-//   useEffect(() => {
-//     // Fetch all orders from the API and update state
-//     const fetchOrders = async () => {
-//       const response = await axios.get('http://localhost:8080/api/orders');
-//       setOrders(response.data);
-//     };
-//     fetchOrders();
-//   }, []);
-
-//   const addOrder = async (values) => {
-//     // Add new order to the API and update state
-//     const response = await axios.post('http://localhost:8080/api/orders', values);
-//     setOrders([...orders, response.data]);
-//     setIsModalVisible(false);
-//   };
-
-//   const deleteOrder = async (id) => {
-//     // Delete order from the API and update state
-//     const response = await axios.delete(`http://localhost:8080/api/orders/${id}`);
-//     if (response.status === 204) {
-//       setOrders(orders.filter((order) => order.id !== id));
-//     }
-//   };
-
-//   const updateOrder = async (id, values) => {
-//     // Update order in the API and update state
-//     const response = await axios.put(`http://localhost:8080/api/orders/${id}`, values);
-//     if (response.status === 200) {
-//       const updatedOrder = { ...editingOrder, ...values };
-//       setOrders(orders.map((order) => (order.id === id ? updatedOrder : order)));
-//       setIsEditing(false);
-//     }
-//   };
-
-//   const handleEditClick = (record) => {
-//     // Set editing order and open modal for editing
-//     setEditingOrder(record);
-//     setIsEditing(true);
-//     setIsModalVisible(true);
-//   };
-
-//   const handleAddClick = () => {
-//     // Reset form and open modal for adding
-//     form.resetFields();
-//     setIsEditing(false);
-//     setIsModalVisible(true);
-//   };
-
-//   const handleOk = () => {
-//     // Call appropriate function based on whether we are editing or adding
-//     if (isEditing) {
-//       form.validateFields().then((values) => {
-//         updateOrder(editingOrder.id, values);
-//         form.resetFields();
-//       });
-//     } else {
-//       form.validateFields().then((values) => {
-//         addOrder(values);
-//         form.resetFields();
-//       });
-//     }
-//   };
-
-//   const handleCancel = () => {
-//     // Close modal and reset form
-//     setIsModalVisible(false);
-//     form.resetFields();
-//   };
-
-//   const generateInvoice = async (id) => {
-//     // Generate invoice for order with given ID
-//     const response = await axios.post(`http://localhost:8080/api/orders/${id}/invoice`);
-//     if (response.status === 200) {
-//       // Open generated invoice in new window
-//       window.open(response.data.invoiceUrl, '_blank');
-//     }
-//   };
-
-//   const columns = [
-//     {
-//       title: 'Order ID',
-//       dataIndex: 'id',
-//     },
-//     {
-//       title: 'Customer Name',
-//       dataIndex: 'customerName',
-//     },
-//     {
-//       title: 'Product Name',
-//       dataIndex: 'productName',
-//     },
-//     {
-//       title: 'Quantity',
-//       dataIndex: 'quantity',
-//     },
-//     {
-//       title: 'Total Price',
-//        dataIndex: 'total_price',
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (_, record) => (
-//         <Space size="middle">
-//           <Button type="link" onClick={() => handleEditClick(record)}>
-//             Edit
-//           </Button>
-//           <Button type="link" onClick={() => deleteOrder(record.id)}>
-//             Delete
-//           </Button>
-//           <Button type="link" onClick={() => generateInvoice(record.id)}>
-//             Generate Invoice
-//           </Button>
-//         </Space>
-//       ),
-//     },
-//   ];
-
-//   return (
-//   <div>
-//   <Button type="primary" onClick={handleAddClick}>
-//   Add Order
-//   </Button>
-//   <Modal
-//   title={isEditing ? 'Edit Order' : 'Add Order'}
-//   visible={isModalVisible}
-//   onOk={handleOk}
-//   onCancel={handleCancel}
-//   okText={isEditing ? 'Save' : 'Create'}
-//   >
-//   <Form form={form} layout="vertical">
-//   <Item
-//   name="customerName"
-//   label="Customer Name"
-//   rules={[{ required: true, message: 'Please enter customer name' }]}
-//   initialValue={editingOrder.customerName}
-//   >
-//   <Input />
-//   </Item>
-//   <Item
-//   name="productName"
-//   label="Product Name"
-//   rules={[{ required: true, message: 'Please enter product name' }]}
-//   initialValue={editingOrder.productName}
-//   >
-//   <Input />
-//   </Item>
-//   <Item
-//   name="quantity"
-//   label="Quantity"
-//   rules={[{ required: true, message: 'Please enter quantity' }]}
-//   initialValue={editingOrder.quantity}
-//   >
-//   <Input type="number" />
-//   </Item>
-//   <Item
-//   name="totalPrice"
-//   label="Total Price"
-//   rules={[{ required: true, message: 'Please enter total price' }]}
-//   initialValue={editingOrder.totalPrice}
-//   >
-//   <Input type="number" />
-//   </Item>
-//   </Form>
-//   </Modal>
-//   <Table columns={columns} dataSource={orders} rowKey="id" />
-//   </div>
-//   );
-//   };
-  
-//   export default Orders;    
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form, Input, Table, Space } from 'antd';
+import { Table, Button, Modal, Form, Input, DatePicker, Select } from 'antd';
+import { Link, Route, Switch } from 'react-router-dom';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import moment from 'moment';
+import 'moment/locale/en-gb'; // Import the desired locale for the date picker
+import AddOrder from './AddOrder';
 
+const { Option } = Select;
 
-
-const { Item } = Form;
-
-const Orders = () => {
-  const [form] = Form.useForm();
+const Order = () => {
   const [orders, setOrders] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingOrder, setEditingOrder] = useState({});
+  const [customers, setCustomers] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState(null);
 
   useEffect(() => {
-    // Fetch all orders from the API and update state
-    const fetchOrders = async () => {
-      const response = await axios.get('http://localhost:8080/api/orders');
-      setOrders(response.data);
-    };
     fetchOrders();
+    fetchCustomers();
   }, []);
 
-  const addOrder = async (values) => {
-    // Calculate total price and add new order to the API and update state
-    const totalPrice = values.quantity * values.unitPrice;
-    const response = await axios.post('http://localhost:8080/api/orders', { ...values, totalPrice });
-    setOrders([...orders, response.data]);
-    setIsModalVisible(false);
-  };
-
-  const deleteOrder = async (id) => {
-    // Delete order from the API and update state
-    const response = await axios.delete(`http://localhost:8080/api/orders/${id}`);
-    if (response.status === 204) {
-      setOrders(orders.filter((order) => order.id !== id));
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/orders');
+      setOrders(response.data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const updateOrder = async (id, values) => {
-    // Calculate total price and update order in the API and update state
-    const totalPrice = values.quantity * values.unitPrice;
-    const response = await axios.put(`http://localhost:8080/api/orders/${id}`, { ...values, totalPrice });
-    if (response.status === 200) {
-      const updatedOrder = { ...editingOrder, ...values, totalPrice };
-      setOrders(orders.map((order) => (order.id === id ? updatedOrder : order)));
-      setIsEditing(false);
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/customers');
+      setCustomers(response.data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handleEditClick = (record) => {
-    // Set editing order and open modal for editing
-    setEditingOrder(record);
-    setIsEditing(true);
-    setIsModalVisible(true);
-  };
-
-  const handleAddClick = () => {
-    // Reset form and open modal for adding
-    form.resetFields();
-    setIsEditing(false);
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    // Call appropriate function based on whether we are editing or adding
-    if (isEditing) {
-      form.validateFields().then((values) => {
-        updateOrder(editingOrder.id, values);
-        form.resetFields();
-      });
-    } else {
-      form.validateFields().then((values) => {
-        addOrder(values);
-        form.resetFields();
-      });
+  const handleDelete = async (record) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/orders/${record.id}`);
+      fetchOrders();
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handleCancel = () => {
-    // Close modal and reset form
-    setIsModalVisible(false);
-    form.resetFields();
+  const handleEdit = (record) => {
+    setCurrentOrder(record);
+    setModalVisible(true);
   };
 
-  const generateInvoice = async (id) => {
-    // Generate invoice for order with given ID
-   // Generate invoice for order with given ID
-    const response = await axios.post(`http://localhost:8080/api/orders/${id}/invoice`);
-    if (response.status === 200) {
-    window.open(response.data.invoiceUrl, '_blank');
+  const handleModalClose = () => {
+    setCurrentOrder(null);
+    setModalVisible(false);
+  };
+
+  const handleModalSave = async () => {
+    try {
+      const response = await axios.put(`http://localhost:8080/api/orders/${currentOrder.id}`, currentOrder);
+      if (response.status === 200) {
+        fetchOrders();
+        setModalVisible(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    };
+  };
 
+  const handleFormChange = (field, value) => {
+    if (field === 'customer') {
+      // Parse the selected customer object back to JSON
+      value = JSON.parse(value);
+    }
+    setCurrentOrder({ ...currentOrder, [field]: value });
+  };
+  
 
-    
-    const columns = [
+  const columns = [
     {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
+      title: 'Order ID',
+      dataIndex: 'id',
     },
     {
-    title: 'Customer Name',
-    dataIndex: 'customerName',
-    key: 'customerName',
+      title: 'Customer Name',
+      dataIndex: 'customer',
+      render: (customer) => customer.name,
     },
     {
-    title: 'Product Name',
-    dataIndex: 'productName',
-    key: 'productName',
+      title: 'Product',
+      dataIndex: 'product',
     },
     {
-    title: 'Quantity',
-    dataIndex: 'quantity',
-    key: 'quantity',
+      title: 'Quantity',
+      dataIndex: 'quantity',
     },
     {
-    title: 'Total Price',
-    dataIndex: 'totalPrice',
-    key: 'totalPrice',
+      title: 'Unit Price',
+      dataIndex: 'unitPrice',
     },
     {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-    <Space size="middle">
-    <Button type="primary" onClick={() => handleEditClick(record)}>Edit</Button>
-    <Button type="danger" onClick={() => deleteOrder(record.id)}>Delete</Button>
-    <Button onClick={() => generateInvoice(record.id)}>Generate Invoice</Button>
-    </Space>
-    ),
+      title: 'Shipping Charges',
+      dataIndex: 'shippingCharges',
     },
-    ];
-    
-    return (
-    <div>
-    <Button type="primary" onClick={handleAddClick}>Add Order</Button>
-    <Table dataSource={orders} columns={columns} rowKey="id" />
-    <Modal title={isEditing ? 'Edit Order' : 'Add Order'} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-    <Form form={form} initialValues={editingOrder}>
-    <Item label="Customer Name" name="customerName" rules={[{ required: true, message: 'Please input customer name!' }]}>
-    <Input />
-    </Item>
-    <Item label="Product Name" name="productName" rules={[{ required: true, message: 'Please input product name!' }]}>
-    <Input />
-    </Item>
-    <Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Please input quantity!' }]}>
-    <Input type="number" min={1} />
-    </Item>
-    <Item label="Unit Price" name="unitPrice" rules={[{ required: true, message: 'Please input unit price!' }]}>
-    <Input type="number" min={0} step={0.01} />
-    </Item>
-    </Form>
-    </Modal>
-    </div>
-    );
-    };
-    
-    export default Orders;
+    {
+      title: 'Total Price',
+      dataIndex: 'totalPrice',
+    },
+    {
+      title: 'Created At',
+      dataIndex: 'createdAt',
+    },
+    {
+      title: 'Updated At',
+      dataIndex: 'updatedAt',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      render: (_, record) => (
+        <>
+          <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+            Edit
+          </Button>
+          <Button type="link" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record)}>
+            Delete
+          </Button>
+        </>
+      ),
+    },
+  ];
+
+  // Set the locale for the date picker
+  moment.locale('en-gb');
+
+  return (
+    <>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
+        <h1>Orders</h1>
+        <Link to="/sales/add-order">
+          <Button type="primary">Add Order</Button>
+        </Link>
+      </div>
+      <Table columns={columns} dataSource={orders} rowKey="id" />
+
+      <Switch>
+        <Route path="/orders/add-order">
+          <AddOrder onAddOrder={fetchOrders} />
+        </Route>
+      </Switch>
+
+      {currentOrder && (
+        <Modal
+          visible={modalVisible}
+          onCancel={handleModalClose}
+          onOk={handleModalSave}
+          okText="Save"
+          cancelText="Cancel"
+        >
+          <Form
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{
+              orderId: currentOrder.orderId,
+              customerName: currentOrder.customerName,
+              product: currentOrder.product,
+              quantity: currentOrder.quantity,
+              unitPrice: currentOrder.unitPrice,
+              shippingCharges: currentOrder.shippingCharges,
+              totalPrice: currentOrder.totalPrice,
+              createdAt: moment(currentOrder.createdAt),
+              updatedAt: moment(currentOrder.updatedAt),
+            }}
+            onFinish={handleModalSave}
+          >
+            {/* <Form.Item label="Order ID" name="orderId">
+              <Input onChange={(e) => handleFormChange('orderId', e.target.value)} />
+            </Form.Item> */}
+            <Form.Item label="Customer Name" name="customer">
+              <Select onChange={(value) => handleFormChange('customer', value)}>
+                {customers.map((customer) => (
+                  <Option key={customer.id} value={JSON.stringify(customer)}>
+                    {customer.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item label="Product" name="product">
+              <Input onChange={(e) => handleFormChange('product', e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Quantity" name="quantity">
+              <Input onChange={(e) => handleFormChange('quantity', e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Unit Price" name="unitPrice">
+              <Input onChange={(e) => handleFormChange('unitPrice', e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Shipping Charges" name="shippingCharges">
+              <Input onChange={(e) => handleFormChange('shippingCharges', e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Total Price" name="totalPrice">
+              <Input onChange={(e) => handleFormChange('totalPrice', e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Created At" name="createdAt">
+              <DatePicker onChange={(date) => handleFormChange('createdAt', date)} />
+            </Form.Item>
+            <Form.Item label="Updated At" name="updatedAt">
+              <DatePicker onChange={(date) => handleFormChange('updatedAt', date)} />
+            </Form.Item>
+          </Form>
+        </Modal>
+      )}
+    </>
+  );
+};
+
+export default Order;

@@ -8,5 +8,5 @@ import com.FYP.AIA.model.Delivery;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<	Customer, Long>{
-
+	Customer findByName(String name);
 }

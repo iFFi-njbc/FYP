@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.FYP.AIA.model.Customer;
 import com.FYP.AIA.model.Delivery;
+import com.FYP.AIA.model.Warehouse;
 import com.FYP.AIA.repository.CustomerRepository;
 import com.FYP.AIA.repository.DeliveryRepository;
+import com.FYP.AIA.repository.WarehouseRepository;
 import com.FYP.AIA.service.CustomerService;
 import com.FYP.AIA.service.DeliveryService;
+import com.FYP.AIA.service.WarehouseService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -35,6 +38,10 @@ public class DeliveryController {
 	private CustomerService customerService;
 	@Autowired
 	private CustomerRepository customerRepository;
+	@Autowired
+	private WarehouseRepository warehouseRepository;
+	@Autowired
+	private WarehouseService warehouseService;
 
     @GetMapping("/deliveries")
     public ResponseEntity<List<Delivery>> getAllDeliveries() {
@@ -50,16 +57,30 @@ public class DeliveryController {
     }
 
     @PostMapping("/deliveries")
-    public ResponseEntity<Delivery> saveDelivery(@RequestBody Delivery delivery) {
+    public ResponseEntity<Delivery> saveDelivery(@RequestBody Delivery delivery) throws Exception {
+        Long customerId = delivery.getCustomer().getId();
+        Long warehouseId = delivery.getWarehouse().getId();
 
-    	  System.out.println(delivery);
-    	    Customer customer = customerRepository.findById(delivery.getCustomer().getId())
-    	            .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-    	    delivery.setCustomer(customer);
+        if (customerId == null || warehouseId == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
-    	    Delivery savedDelivery = deliveryService.createDelivery(delivery);
-    	    return new ResponseEntity<>(savedDelivery, HttpStatus.CREATED);
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        Optional<Warehouse> optionalWarehouse = warehouseRepository.findById(warehouseId);
+
+        if (optionalCustomer.isEmpty() || optionalWarehouse.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Customer customer = optionalCustomer.get();
+        Warehouse warehouse = optionalWarehouse.get();
+        delivery.setCustomer(customer);
+        delivery.setWarehouse(warehouse);
+
+        Delivery savedDelivery = deliveryService.createDelivery(delivery);
+        return new ResponseEntity<>(savedDelivery, HttpStatus.CREATED);
     }
+
 
     @PutMapping("/deliveries/{id}")
     public ResponseEntity<Delivery> updateDelivery(@PathVariable Long id, @RequestBody Delivery newDelivery) {
@@ -71,6 +92,7 @@ public class DeliveryController {
             delivery.setStatus(newDelivery.getStatus());
             delivery.setCustomer(newDelivery.getCustomer());
             delivery.setTotalAmount(newDelivery.getTotalAmount());
+            delivery.setWarehouse(newDelivery.getWarehouse());
             deliveryRepository.save(delivery);
             return ResponseEntity.ok(delivery);
         } else {

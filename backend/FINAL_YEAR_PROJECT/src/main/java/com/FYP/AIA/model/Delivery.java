@@ -54,8 +54,31 @@ public class Delivery {
 	@JoinColumn(name = "customer_id", nullable = false)
 	//@JsonManagedReference
 	private Customer customer;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "warehouse_id", nullable = false)
+	private Warehouse warehouse;
 
 	
+	public Delivery(Long id, Customer customer, Warehouse warehouse, String address, LocalDate date,
+			DeliveryStatus status, Double totalAmount) {
+		super();
+		this.id = id;
+		this.customer = customer;
+		this.warehouse = warehouse;
+		this.address = address;
+		this.date = date;
+		this.status = status;
+		this.totalAmount = totalAmount;
+	}
+
+	public Warehouse getWarehouse() {
+		return warehouse;
+	}
+
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
+	}
+
 	@Column(name = "address", nullable = false)
 	private String address;
 
@@ -71,6 +94,8 @@ public class Delivery {
 
 	@Column(name = "total_amount", nullable = false)
 	private Double totalAmount;
+	
+	
 
 
 	public Long getId() {
@@ -123,21 +148,12 @@ public class Delivery {
 	  public void setStatus(String statusString) {
 	        this.status = DeliveryStatus.fromString(statusString);
 	    }
+
+
 	@Override
 	public String toString() {
-		return "Delivery [id=" + id + ", address=" + address + ", date=" + date + ", status=" + status
-				+ ", totalAmount=" + totalAmount + "]";
-	}
-
-	public Delivery(Long id, Customer customer, String address, LocalDate date, DeliveryStatus status,
-			Double totalAmount) {
-		super();
-		this.id = id;
-		this.customer = customer;
-		this.address = address;
-		this.date = date;
-		this.status = status;
-		this.totalAmount = totalAmount;
+		return "Delivery [id=" + id + ", customer=" + customer + ", warehouse=" + warehouse + ", address=" + address
+				+ ", date=" + date + ", status=" + status + ", totalAmount=" + totalAmount + "]";
 	}
 
 	public Delivery() {
