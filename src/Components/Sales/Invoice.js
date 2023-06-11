@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, DatePicker, Select } from 'antd';
 import { Link, Route, Switch } from 'react-router-dom';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
 import AddInvoice from './AddInvoice';
+import ReceivedMoney from './ReceivedMoney';
+
 
 const { Option } = Select;
+
 
 const Invoice = () => {
   const [invoices, setInvoices] = useState([]);
@@ -14,6 +18,8 @@ const Invoice = () => {
   const [warehouses, setWarehouses] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentInvoice, setCurrentInvoice] = useState(null);
+  const history = useHistory();
+
 
   useEffect(() => {
     fetchInvoices();
@@ -56,6 +62,7 @@ const Invoice = () => {
       console.log(error);
     }
   };
+  
 
   const handleEdit = (record) => {
     setCurrentInvoice(record);
@@ -78,6 +85,26 @@ const Invoice = () => {
       console.log(error);
     }
   };
+  const handlePay = async (record) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/invoices/${record.id}`,
+        { ...record, status: true } // Set the status to true (paid)
+      );
+      if (response.status === 200) {
+        // Navigate to the "Received Money" form with the selected invoice data
+        history.push({
+          pathname: '/sales/received-money',
+          state: { invoiceData: record },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  
+  
 
   const handleFormChange = (field, value) => {
     if (field === 'customer') {
@@ -126,20 +153,64 @@ const Invoice = () => {
       title: 'Total Amount',
       dataIndex: 'totalAmount',
     },
-    {
-      title: 'Actions',
-      dataIndex: 'actions',
-      render: (_, record) => (
-        <>
-          <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
-            Edit
+     // Payment Status column
+  {
+    title: 'Payment Status',
+    dataIndex: 'paymentStatus',
+    render: (_, record) => (
+      <>
+        {record.status ? (
+          <span style={{ color: 'green' }}>Paid</span>
+        ) : (
+          <Button type="primary" onClick={() => handlePay(record)}>
+            Mark as Paid
           </Button>
-          <Button type="link" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record)}>
-            Delete
-          </Button>
-        </>
-      ),
-    },
+        )}
+      </>
+    ),
+  },
+
+  // Actions column
+  {
+    title: 'Actions',
+    dataIndex: 'actions',
+    render: (_, record) => (
+      <>
+        <Button
+          type="link"
+          icon={<EditOutlined />}
+          onClick={() => handleEdit(record)}
+          disabled={record.status} // Disable the button if the invoice is already paid
+        >
+          Edit
+        </Button>
+        <Button
+          type="link"
+          danger
+          icon={<DeleteOutlined />}
+          onClick={() => handleDelete(record)}
+          disabled={record.status} // Disable the button if the invoice is already paid
+        >
+          Delete
+        </Button>
+      </>
+    ),
+  },
+    
+    // {
+    //   title: 'Actions',
+    //   dataIndex: 'actions',
+    //   render: (_, record) => (
+    //     <>
+    //       <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+    //         Edit
+    //       </Button>
+    //       <Button type="link" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record)}>
+    //         Delete
+    //       </Button>
+    //     </>
+    //   ),
+    // },
   ];
 
   return (
